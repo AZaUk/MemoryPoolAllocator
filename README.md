@@ -46,22 +46,18 @@ Here’s a quick example of how to use the MemoryPoolAllocator:
 ```cpp
 #include "MemoryPoolAllocator.h"
 
-struct MyStruct {
-    int id;
-    char name[50];
-};
-
 int main() {
-    // Create a memory pool for MyStruct objects
-    MemoryPoolAllocator<MyStruct> pool(100); // Preallocate space for 100 objects
+    // Create a memory pool
+    const size_t blockSize = 256;
+    const size_t numBlocks = 10;
+    
+    MemoryPoolAllocator allocator(blockSize, numBlocks);
 
     // Allocate an object from the pool
-    MyStruct* obj = pool.allocate();
-    obj->id = 1;
-    strcpy(obj->name, "Example");
+    void* ptr1 = allocator.allocate();
 
     // Deallocate the object
-    pool.deallocate(obj);
+    allocator.deallocate(ptr1);
 
     return 0;
 }
@@ -98,6 +94,10 @@ MemoryPoolAllocator(size_t blockSize, size_t numBlocks);
 
 - **`void deallocate(T* ptr)`**  
   Releases the memory back to the pool.
+
+- **`size_t getAllocationStatus()`**
+
+  Returns the number of available slots in the pool.
 
 ---
 
